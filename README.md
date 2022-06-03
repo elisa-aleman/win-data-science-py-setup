@@ -13,6 +13,7 @@ My current Windows PC is using Windows 365.
 - [Setup Git for GitLab](#setup-git-for-gitlab)
     - [Check your branches in git log history in a pretty line](#check-your-branches-in-git-log-history-in-a-pretty-line)
     - [GitLab Markdown math expressions for README.md, etc.](#gitlab-markdown-math-expressions-for-readmemd-etc)
+    - [GitHub Markdown math expressions for README.md, etc.](#github-markdown-math-expressions-for-readmemd-etc)
     - [Git remote origin for SSH](#git-remote-origin-for-ssh)
     - [Make a new Git \(LFS\) repository from local](#make-a-new-git-lfs-repository-from-local)
     - [Manage multiple GitHub or GitLab accounts](#manage-multiple-github-or-gitlab-accounts)
@@ -273,6 +274,86 @@ Math syntax in LaTeX:
 
 https://katex.org/docs/supported.html
 
+<a id="github-markdown-math-expressions-for-readmemd-etc"></a>
+### GitHub Markdown math expressions for README.md, etc.
+
+Following this guide, math is different in GitLab markdown than say, GitHub or LaTeX.
+However, inside of the delimiters, it renders it using KaTeX, which uses LaTeX math syntax! 
+
+https://docs.gitlab.com/ee/user/markdown.html#math
+
+Inline: 
+```
+> $a^2 + b^2 = c^2$
+```
+
+Renders as: $a^2 + b^2 = c^2$
+
+Block:
+```
+> $$a^2 + b^2 = c^2$$
+```
+
+Renders as:
+
+$$a^2 + b^2 = c^2$$
+
+But it only supports one line of math, so for multiple lines you have to do this:
+
+```
+> $$a^2 + b^2 = c^2$$
+> <!-- (line break is important) -->
+> $$c = \sqrt{ a^2 + b^2 }$$
+```
+
+Renders as:
+
+$$a^2 + b^2 = c^2$$
+
+$$c = \sqrt{ a^2 + b^2 }$$
+
+It can even display matrices and the like:
+
+```
+> $$
+> l_1 = 
+> \begin{bmatrix}
+>     \begin{bmatrix}
+>         x_1 & y_1
+>     \end{bmatrix} \\
+>     \begin{bmatrix}
+>         x_2 & y_2
+>     \end{bmatrix} \\
+>     ... \\
+>     \begin{bmatrix}
+>         x_n & y_n
+>     \end{bmatrix} \\
+> \end{bmatrix}
+> $$
+```
+
+$$
+l_1 = 
+\begin{bmatrix}
+    \begin{bmatrix}
+        x_1 & y_1
+    \end{bmatrix} \\
+    \begin{bmatrix}
+        x_2 & y_2
+    \end{bmatrix} \\
+    ... \\
+    \begin{bmatrix}
+        x_n & y_n
+    \end{bmatrix} \\
+\end{bmatrix}
+$$
+
+
+However, % comments will break the environment.
+
+Math syntax in LaTeX:
+
+https://katex.org/docs/supported.html
 
 
 <a id="git-remote-origin-for-ssh"></a>
