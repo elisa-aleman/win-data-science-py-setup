@@ -70,6 +70,18 @@ Then here's some cool packages to try:
 - MarkdownTOC
 - MarkdownPreview
 
+In MarkdownTOC.sublime-settings, paste the following for hyperlink markdowns and compatibility with MarkdownPreview:
+
+```
+{
+  "defaults": {
+    "autoanchor": true,
+    "autolink": true,
+    "markdown_preview": "github"
+  },
+}
+```
+
 <a id="install-git-bash"></a>
 ## Install Git Bash
 
