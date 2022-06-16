@@ -11,6 +11,7 @@ My current Windows PC is using Windows 365.
 - [Basic Settings](#basic-settings)
     - [Install SublimeText](#install-sublimetext)
         - [Easy GitLab or GitHub math: Add paired $ signs to the keybinds](#easy-gitlab-or-github-math-add-paired--signs-to-the-keybinds)
+    - [Easily transform 2 spaced indent to 4 spaced indent](#easily-transform-2-spaced-indent-to-4-spaced-indent)
 - [Install Git Bash](#install-git-bash)
 - [Setup Git for GitLab](#setup-git-for-gitlab)
     - [Check your branches in git log history in a pretty line](#check-your-branches-in-git-log-history-in-a-pretty-line)
@@ -147,6 +148,18 @@ Which, as long as we implement the double escaped dollar sign solution, we can u
     ]
 },
 ```
+
+<a id="easily-transform-2-spaced-indent-to-4-spaced-indent"></a>
+### Easily transform 2 spaced indent to 4 spaced indent
+
+https://forum.sublimetext.com/t/can-i-easily-change-all-existing-2-space-indents-to-4-space-indents/40158/2
+
+- Sublime text, lower right corner
+- Click on Spaces
+- Select the current space number
+- Click Convert indentation to Tabs
+- Select the desired space number
+- Click Convert indentation to Spaces
 
 <a id="install-git-bash"></a>
 ## Install Git Bash
