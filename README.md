@@ -45,6 +45,7 @@ My current Windows PC is using Windows 365.
     - [Reading white PDFs](#reading-white-pdfs)
         - [Firefox](#firefox)
         - [Microsoft Edge](#microsoft-edge)
+        - [Google Chrome](#google-chrome)
 
 <!-- /MarkdownTOC -->
 
@@ -86,9 +87,10 @@ Also, Sublime Text is all about the plugins. Install Package Control by typing C
 
 Then here's some cool packages to try:
 
-- LaTeXTools
-- MarkdownTOC
-- MarkdownPreview
+- [LaTeXTools](https://packagecontrol.io/packages/LaTeXTools)
+- [MarkdownTOC](https://packagecontrol.io/packages/MarkdownTOC)
+- [MarkdownPreview](https://packagecontrol.io/packages/MarkdownPreview)
+- [IncrementSelection](https://packagecontrol.io/packages/Increment%20Selection)
 
 In MarkdownTOC.sublime-settings, paste the following for hyperlink markdowns and compatibility with MarkdownPreview:
 
@@ -1382,12 +1384,13 @@ https://www.reddit.com/r/edge/comments/nhnflv/comment/hgejdwz/?utm_source=share&
 
 > So, I've wanted this feature pretty badly as well and I've found a workaround which doesn't involve inverting the whole OS but still takes some extra steps:
 >
-> - Open the PDF you want to read
-> - Right click > Inspect Element
-> - Select Console tab
-> - Paste the code given below
-> - Hit enter
-> - Profit!
+> 1. Open the PDF you want to read
+> 2. Right click > Inspect Element
+> 3. Select Console tab
+> 4. Paste the code given below
+> 5. Hit enter
+> 6. Profit!
+
 
 ```
 let backgroundColor = PDFViewer.EDGE_PDFVIEWER_BACKGROUND_COLOR_LIGHT;
@@ -1402,20 +1405,56 @@ document.getElementById('layout-container').style.filter = 'invert()';
 
 > You can utilize the snippets feature in DevTools to save the above code. To do that, do:
 > 
-> - Hit F12 or Ctrl + Shift + I to open DevTools
-> - Once the DevTools is open, press Ctrl + Shift + P and type "new snippet" and choose the first option
-> - Paste the above code
-> - Right click "Script snippet #2" > Rename > "dark mode pdf"
-> - Hit enter to rename
-> - Close DevTools
+> 1. Hit F12 or Ctrl + Shift + I to open DevTools
+> 2. Once the DevTools is open, press Ctrl + Shift + P and type "new snippet" and choose the first option
+> 3. Paste the above code
+> 4. Right click "Script snippet #2" > Rename > "dark mode pdf"
+> 5. Hit enter to rename
+> 6. Close DevTools
 > 
 > If you did the above to save that script, the next time, you can perform the following steps to activate dark mode:
 > 
-> - Open PDF
-> - Right click > Inspect Element
-> - Press Ctrl + P
-> - Type exclamation "!"
-> - Hit enter (or select the snippet if you have multiple and press enter)
+> 1. Open PDF
+> 2. Right click > Inspect Element
+> 3. Press Ctrl + P
+> 4. Type exclamation "!"
+> 5. Hit enter (or select the snippet if you have multiple and press enter)
+
+<a id="google-chrome"></a>
+#### Google Chrome
+
+I found a solution in this post:
+
+https://superuser.com/a/1527417
+
+
+> The following snippet adds a div overlay to any browser tab currently displaying a PDF document.
+> 1. Open up your browser's Dev tools then browser console.
+> 2. Paste this JavaScript code in your browser console:
+
+```
+const overlay = document.createElement("div");
+
+const css = `
+    position: fixed;
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+    mix-blend-mode: difference;
+    z-index: 1;
+`
+overlay.setAttribute("style", css);
+
+document.body.appendChild(overlay);
+```
+
+> 3. Hit Enter
+>
+> Special thanks: https://www.reddit.com/r/chrome/comments/e3txhi/comment/fem1cto
+
 
 ---
 
