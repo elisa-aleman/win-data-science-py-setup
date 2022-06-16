@@ -9,6 +9,8 @@ My current Windows PC is using Windows 365.
 <!-- MarkdownTOC autolink="true" autoanchor="true" -->
 
 - [Basic Settings](#basic-settings)
+    - [Install SublimeText](#install-sublimetext)
+        - [Easy GitLab or GitHub math: Add paired $ signs to the keybinds](#easy-gitlab-or-github-math-add-paired--signs-to-the-keybinds)
 - [Install Git Bash](#install-git-bash)
 - [Setup Git for GitLab](#setup-git-for-gitlab)
     - [Check your branches in git log history in a pretty line](#check-your-branches-in-git-log-history-in-a-pretty-line)
@@ -50,7 +52,14 @@ There are some basic things you should do to make programming in Windows easier.
 - When leaving the desk always press WIN+L to lock under password.
 - For ease of use, make hidden files and file extensions visible.
     - Open an explorer window, under View > Show > File name extensions, Hidden items
+
+<a id="install-sublimetext"></a>
+### Install SublimeText
+
 - Install SublimeText4 for ease of use (this is my personal favorite, but it's not necessary)
+
+https://www.sublimetext.com/download
+
 - Paste the SublimeText4 preferences (my personal preferences)
 
 ```
@@ -86,6 +95,46 @@ In MarkdownTOC.sublime-settings, paste the following for hyperlink markdowns and
     "markdown_preview": "github"
   },
 }
+```
+
+<a id="easy-gitlab-or-github-math-add-paired--signs-to-the-keybinds"></a>
+#### Easy GitLab or GitHub math: Add paired $ signs to the keybinds
+
+Preferences > Key Bindings:
+
+Add this inside the brackets:
+```
+// Auto-pair dollar signs
+{ "keys": ["$"], "command": "insert_snippet", "args": {"contents": "\\$$0\\$"}, "context":
+    [
+        { "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+        { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
+        { "key": "following_text", "operator": "regex_contains", "operand": "^(?:\t| |\\)|]|\\}|>|$)", "match_all": true },
+        { "key": "preceding_text", "operator": "not_regex_contains", "operand": "[\\$a-zA-Z0-9_]$", "match_all": true },
+        { "key": "eol_selector", "operator": "not_equal", "operand": "string.quoted.double", "match_all": true }
+    ]
+},
+{ "keys": ["$"], "command": "insert_snippet", "args": {"contents": "\\$${0:$SELECTION}\\$"}, "context":
+    [
+        { "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+        { "key": "selection_empty", "operator": "equal", "operand": false, "match_all": true }
+    ]
+},
+{ "keys": ["$"], "command": "move", "args": {"by": "characters", "forward": true}, "context":
+    [
+        { "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+        { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
+        { "key": "following_text", "operator": "regex_contains", "operand": "^\\$", "match_all": true }
+    ]
+},
+{ "keys": ["backspace"], "command": "run_macro_file", "args": {"file": "Packages/Default/Delete Left Right.sublime-macro"}, "context":
+    [
+        { "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+        { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
+        { "key": "preceding_text", "operator": "regex_contains", "operand": "\\$$", "match_all": true },
+        { "key": "following_text", "operator": "regex_contains", "operand": "^\\$", "match_all": true }
+    ]
+},
 ```
 
 <a id="install-git-bash"></a>
