@@ -13,6 +13,7 @@ My current Windows PC is using Windows 365.
         - [Easy GitLab or GitHub math: Add paired $ signs to the keybinds](#easy-gitlab-or-github-math-add-paired--signs-to-the-keybinds)
     - [Easily transform 2 spaced indent to 4 spaced indent](#easily-transform-2-spaced-indent-to-4-spaced-indent)
 - [Install Git Bash](#install-git-bash)
+    - [Install zstd and rsync for Git Bash](#install-zstd-and-rsync-for-git-bash)
 - [Setup Git for GitLab](#setup-git-for-gitlab)
     - [Check your branches in git log history in a pretty line](#check-your-branches-in-git-log-history-in-a-pretty-line)
     - [GitLab Markdown math expressions for README.md, etc.](#gitlab-markdown-math-expressions-for-readmemd-etc)
@@ -194,6 +195,70 @@ I used most of the suggestions on installation, except for a few exceptions. Her
 Now click **Install** and wait for the installation to finish.
 
 One thing I noticed is that if I open the GitBash software from the Windows pane, windows command prompt `cmd` style commands such as `cls` will run, while if I right click a folder and run GitBash from that location, pseudo-Unix style commands such as `clear` will run. It is confusing and I'm used to Unix style commands so remember to always right click open GitBash.
+
+<a id="install-zstd-and-rsync-for-git-bash"></a>
+### Install zstd and rsync for Git Bash
+
+Installing rsync is necessary to sync files with a Linux server from a windows machine, which is useful to run big programs like machine learning when that server has a powerful GPU. However, rsync is a Unix command so we have to install it manually to be able to use it with Git Bash.
+
+https://shchae7.medium.com/how-to-use-rsync-on-git-bash-6c6bba6a03ca
+
+1. Open Git Bash as administrator
+
+2. Install zstd
+
+```
+mkdir zstd
+cd zstd
+curl -L -O https://github.com/facebook/zstd/releases/download/v1.4.4/zstd-v1.4.4-win64.zip
+unzip zstd-v1.4.4-win64.zip
+echo "alias zstd='~/zstd/zstd.exe'" >> ~/.bashrc
+source ~/.bashrc
+```
+
+3. Get rsync.exe
+
+```
+cd
+mkdir rsync
+cd rsync
+curl -L -O https://repo.msys2.org/msys/x86_64/rsync-3.2.3-1-x86_64.pkg.tar.zst
+zstd -d rsync-3.2.3–1-x86_64.pkg.tar.zst
+tar -xvf rsync-3.2.3-1-x86_64.pkg.tar
+cp ./usr/bin/rsync.exe /usr/bin
+```
+
+4. Install dependencies
+
+```
+cd
+mkdir libzstd
+cd libzstd
+curl -L -O https://repo.msys2.org/msys/x86_64/libzstd-1.4.8-1-x86_64.pkg.tar.zst
+zstd -d libzstd-1.4.8-1-x86_64.pkg.tar.zst
+tar -xvf libzstd-1.4.8-1-x86_64.pkg.tar
+cp ./usr/bin/msys-zstd-1.dll /usr/bin
+```
+
+```
+cd
+mkdir libxxhash
+cd libxxhash
+curl -L -O https://repo.msys2.org/msys/x86_64/libxxhash-0.8.0-1-x86_64.pkg.tar.zst
+zstd -d libxxhash-0.8.0-1-x86_64.pkg.tar.zst
+tar -xvf libxxhash-0.8.0-1-x86_64.pkg.tar
+cp ./usr/bin/msys-xxhash-0.8.0.dll /usr/bin
+```
+
+5. Check if rsync is working
+
+On a normal git bash session:
+
+```
+rsync
+```
+
+It should output the different options you can use with it.
 
 <a id="setup-git-for-gitlab"></a>
 ## Setup Git for GitLab
