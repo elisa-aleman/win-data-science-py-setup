@@ -864,10 +864,14 @@ There is two ways of doing this, but I chose option 1 because it's faster and ca
 ```
 nano ~/.bashrc
 ---- add in nano interface---
+# PYENV paths
 export PATH=$PATH:~/.pyenv/pyenv-win/bin:~/.pyenv/pyenv-win/shims
 export PYENV=~/.pyenv/pyenv-win/
 export PYENV_ROOT=~/.pyenv/pyenv-win/
 export PYENV_HOME=~/.pyenv/pyenv-win/
+export PYENV_PYTHON_EXE=$(dirname $(pyenv.bat which python))
+export PATH=$PATH:$PYENV_PYTHON_EXE
+# To update PYENV_PYTHON_EXE if pyenv changes versions close bash and open again
 CTRL+O
 CTRL+X
 --------------------
@@ -971,7 +975,8 @@ Now if we just run `python` in Git Bash, it will hang instead of opening the int
 ```
 nano ~/.bashrc
 ----nano interface---
-alias python='winpty pyenv.bat exec python'
+# To run Python in Git Bash like in Unix
+alias python='winpty python.exe'
 CTRL+O
 CTRL+X
 source ~/.bashrc
