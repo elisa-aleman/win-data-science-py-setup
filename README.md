@@ -123,6 +123,7 @@ Which, as long as we implement the double escaped dollar sign solution, we can u
 
 - Preferences > Key Bindings:
 - Add this inside the brackets:
+
 ```
 // Auto-pair dollar signs
 { "keys": ["$"], "command": "insert_snippet", "args": {"contents": "\\$$0\\$"}, "context":
