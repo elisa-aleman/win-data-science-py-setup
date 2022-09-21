@@ -8,6 +8,8 @@ My current Windows PC is using Windows 365.
 
 <!-- MarkdownTOC autolink="true" autoanchor="true" -->
 
+- [WSL installation guide](#wsl-installation-guide)
+    - [WSL: Paths to directories outside of the Linux environment](#wsl-paths-to-directories-outside-of-the-linux-environment)
 - [Basic Settings](#basic-settings)
     - [Install SublimeText](#install-sublimetext)
         - [Easy GitLab or GitHub math: Add paired $ signs to the keybinds](#easy-gitlab-or-github-math-add-paired--signs-to-the-keybinds)
@@ -21,6 +23,7 @@ My current Windows PC is using Windows 365.
     - [Git remote origin for SSH](#git-remote-origin-for-ssh)
     - [Make a new Git \(LFS\) repository from local](#make-a-new-git-lfs-repository-from-local)
     - [Manage multiple GitHub or GitLab accounts](#manage-multiple-github-or-gitlab-accounts)
+        - [WSL and Windows shared ssh keys](#wsl-and-windows-shared-ssh-keys)
 - [Install Python with pyenv-win and set it up](#install-python-with-pyenv-win-and-set-it-up)
     - [Install pyenv first](#install-pyenv-first)
         - [Option 1) Adding the paths to .bashrc so they're added each time Git Bash is opened](#option-1-adding-the-paths-to-bashrc-so-theyre-added-each-time-git-bash-is-opened)
@@ -50,6 +53,21 @@ My current Windows PC is using Windows 365.
         - [Google Chrome](#google-chrome)
 
 <!-- /MarkdownTOC -->
+
+<a id="wsl-installation-guide"></a>
+## WSL installation guide
+
+https://www.groovypost.com/howto/install-windows-subsystem-for-linux-in-windows-11/
+
+1. Open the cmd with administrator privileges
+2. `wsl --install`
+3. Restart computer
+4. Make username under new Linux terminal
+
+<a id="wsl-paths-to-directories-outside-of-the-linux-environment"></a>
+### WSL: Paths to directories outside of the Linux environment
+
+If in the above tutorial for separate git accounts, for example, you needed to use paths to locations in the Windows system, you can replace C: with /mnt/c/
 
 <a id="basic-settings"></a>
 ## Basic Settings
@@ -98,6 +116,11 @@ Then here's some cool packages to try:
 - [Selection Evaluator](https://packagecontrol.io/packages/Selection%20Evaluator)
 - [Paste as One Line](https://packagecontrol.io/packages/Paste%20as%20One%20Line)
 - [Invert Current Color Scheme](https://packagecontrol.io/packages/Invert%20Current%20Color%20Scheme)
+- [PackageResourceViewer](https://packagecontrol.io/packages/PackageResourceViewer)
+
+Now, for the Invert Current Color Scheme, I have my own fork that works with Sublime Text 4, so use the PackageResourceViewer to replace the main python file with my code:
+ 
+https://github.com/elisa-aleman/sublime-invert-current-color-scheme
 
 In MarkdownTOC.sublime-settings, paste the following for hyperlink markdowns and compatibility with MarkdownPreview:
 
@@ -843,6 +866,91 @@ git clone https://<username>@github.com/<organization>/<repo>.git
 
 And done! When you push or pull from the personal account you might encounter some 2 factor authorizations at login, but otherwise it's ready to work on both personal and work projects.
 
+<a id="wsl-and-windows-shared-ssh-keys"></a>
+#### WSL and Windows shared ssh keys
+
+Do the whole thing on windows first, then follow these steps:
+
+https://devblogs.microsoft.com/commandline/sharing-ssh-keys-between-windows-and-wsl-2/
+
+1. Copy keys to WSL
+
+```
+cp -r /mnt/c/Users/<username>/.ssh ~/.ssh
+```
+
+2. Update permissions on the keys
+
+```
+chmod 600 ~/.ssh/id_rsa
+```
+Repeat for the other keys as well
+
+3. Install keychain
+
+```
+sudo apt install keychain
+```
+
+4. Add keychain eval to .bash_profile for every key you have:
+
+```
+echo 'eval "$(keychain --eval --agents ssh id_rsa)"' >> ~/.bash_profile
+echo 'eval "$(keychain --eval --agents ssh id_rsa_<personal_key>)"' >> ~/.bash_profile
+echo 'eval "$(keychain --eval --agents ssh id_rsa_<work_key>)"' >> ~/.bash_profile
+```
+
+This will make it so that every time you start up the computer you have to type in the passwords for each of the keys, but they'll remain accessible after that.
+
+5. Setup Git config to match
+
+Copy .gitconfig from the Windows home to the WSL home folder.
+
+Mirror the folder structure and sub-configuration files (e.g. .gitconfig.pers, .gitconfig.work).
+
+Now any new folders created under WSL in these folders will have the same permissions.
+
+However, if you want to access a git repository under the Windows environment through WSL, entering the paths to match will not be enough.
+
+For example, even if you add: 
+
+```
+[includeIf “gitdir:/mnt/c/Users/<username>/personal/”] # include for all .git projects under personal/ 
+path = /mnt/c/Users/<username>/personal/.gitconfig.pers
+```
+ Git will return an error like this:
+
+```
+fatal: detected dubious ownership in repository at '/mnt/c/Users/......'
+To add an exception for this directory, call:
+
+        git config --global --add safe.directory /mnt/c/Users/......
+```
+
+This happens because the path to the directory is different than expected, even if it points at the same directory.
+
+https://stackoverflow.com/questions/73485958/how-to-correct-git-reporting-detected-dubious-ownership-in-repository-withou
+
+This link explains that the newer versions of git are stricter with directory ownership.
+
+This can be bypassed by setting this: **(However, only use this if you do not consider yourself at risk)**
+
+```
+git config --global safe.directory '*'
+```
+
+Now it is accessible from both ends!
+
+If you mirrored the folders as well as added the windows folders, your configuration file should look like this:
+
+```
+[includeIf “gitdir:~/personal/”] # include for all .git projects under personal/ 
+path = ~/personal/.gitconfig.pers
+[includeIf “gitdir:/mnt/c/Users/<username>/personal/”] # include for all .git projects under personal/ 
+path = /mnt/c/Users/<username>/personal/.gitconfig.pers
+```
+
+
 <a id="install-python-with-pyenv-win-and-set-it-up"></a>
 ## Install Python with pyenv-win and set it up
 
@@ -943,8 +1051,8 @@ Python 3.10.4
 Let's install python 3.9.6 since that's the latest under pyenv-win (`pyenv install -l` to check).
 
 ```
-pyenv install 3.9.6
-pyenv global 3.9.6
+pyenv install 3.10.7
+pyenv global 3.10.7
 ```
 
 That sets 3.9.6 as the default.
@@ -1051,13 +1159,18 @@ https://mothergeo-py.readthedocs.io/en/latest/development/how-to/venv-win.html
 <a id="useful-data-science-libraries"></a>
 ### Useful Data Science libraries
 
-This is my generic fresh start install so I can work. There's more libraries with complicated installations in other repositories of mine, and you might not wanna run this particular piece of code without checking what I'm doing first. For example, you might have a specific version of Tensorflow that you want, or some of these you won't use. But I'll leave it here as reference.
+This is my generic fresh start install so I can work. Usually I'd install all of them in general, but recently I only install the necessary libraries under venv. There's more libraries with complicated installations in other repositories of mine, and you might not wanna run this particular piece of code without checking what I'm doing first. For example, you might have a specific version of Tensorflow that you want, or some of these you won't use. But I'll leave it here as reference.
 
 ```
-pip install numpy scipy statsmodels matplotlib \
-sklearn beautifulsoup4 requests selenium gensim \
-nltk langdetect sympy pyclustering \
-tensorflow tflearn keras minepy
+pip install numpy scipy jupyter statsmodels \
+pandas pathlib tqdm retry openpyxl \
+sklearn sympy pyclustering \
+beautifulsoup4 requests selenium \
+gensim nltk langdetect \
+matplotlib adjustText plotly kaleido \
+tensorflow tflearn keras \
+torch torchaudio torchvision \
+optuna minepy
 ```
 
 Although some of these (specifically minepy) need the Visual Studio C++ Build Tools as a dependency, so install it first:<br>
@@ -1512,7 +1625,7 @@ https://pncnmnp.github.io/blogs/firefox-dark-mode.html
     filter: invert(100%);
 }
 ```
-s
+
 > - On Firefox's URL bar, type about:config.
 > - Search for toolkit.legacyUserProfileCustomizations.stylesheets and set it to true.
 > - Restart Firefox and fire up a PDF file to see the change!
