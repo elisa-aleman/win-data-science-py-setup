@@ -11,28 +11,31 @@ My current Windows PC is using Windows 365.
 - [WSL installation guide](#wsl-installation-guide)
     - [WSL: Paths to directories outside of the Linux environment](#wsl-paths-to-directories-outside-of-the-linux-environment)
     - [WSL: About .profile and .bash_profile](#wsl-about-profile-and-bash_profile)
+    - [Linux development guide](#linux-development-guide)
 - [Basic Settings](#basic-settings)
     - [Install SublimeText](#install-sublimetext)
         - [Easy GitLab or GitHub math: Add paired $ signs to the keybinds](#easy-gitlab-or-github-math-add-paired--signs-to-the-keybinds)
     - [Easily transform 2 spaced indent to 4 spaced indent](#easily-transform-2-spaced-indent-to-4-spaced-indent)
 - [Install Git Bash](#install-git-bash)
     - [Install zstd and rsync for Git Bash](#install-zstd-and-rsync-for-git-bash)
-- [Setup Git for GitLab](#setup-git-for-gitlab)
+- [Setup Git](#setup-git)
     - [Check your branches in git log history in a pretty line](#check-your-branches-in-git-log-history-in-a-pretty-line)
+    - [Push with tags: multi-line git alias](#push-with-tags-multi-line-git-alias)
     - [GitLab Markdown math expressions for README.md, etc.](#gitlab-markdown-math-expressions-for-readmemd-etc)
     - [GitHub Markdown math expressions for README.md, etc.](#github-markdown-math-expressions-for-readmemd-etc)
     - [Git remote origin for SSH](#git-remote-origin-for-ssh)
     - [Make a new Git \(LFS\) repository from local](#make-a-new-git-lfs-repository-from-local)
     - [Manage multiple GitHub or GitLab accounts](#manage-multiple-github-or-gitlab-accounts)
         - [WSL and Windows shared ssh keys](#wsl-and-windows-shared-ssh-keys)
-- [Install Python with pyenv-win and set it up](#install-python-with-pyenv-win-and-set-it-up)
+- [Install Docker Desktop for Windows](#install-docker-desktop-for-windows)
+- [Install Python versions with pyenv-win and virtual environments with poetry](#install-python-versions-with-pyenv-win-and-virtual-environments-with-poetry)
     - [Install pyenv first](#install-pyenv-first)
         - [Option 1) Adding the paths to .bashrc so they're added each time Git Bash is opened](#option-1-adding-the-paths-to-bashrc-so-theyre-added-each-time-git-bash-is-opened)
         - [Option 2) Using Windows Settings](#option-2-using-windows-settings)
     - [Install and set up Python](#install-and-set-up-python)
+        - [How to upgrade Pyenv](#how-to-upgrade-pyenv)
     - [Read Python Command History between sessions](#read-python-command-history-between-sessions)
-    - [How to upgrade Pyenv](#how-to-upgrade-pyenv)
-    - [Install virtualenv](#install-virtualenv)
+    - [Install poetry](#install-poetry)
     - [Useful Data Science libraries](#useful-data-science-libraries)
         - [Basic tasks:](#basic-tasks)
         - [Plotting:](#plotting)
@@ -99,6 +102,16 @@ This can be fixed in a few ways:
 
 3. Add `source ~/.profile` to the beginning of .bash_profile so that it is run regardless, and therefore also loads .bashrc if necessary. Personally I chose this one.
 
+
+<a id="linux-development-guide"></a>
+### Linux development guide
+
+If using WSL fully without any interaction from Windows, follow the guide below.
+
+Sometimes, however, using GitBash for committing or other functions that interact with the computer such as in audio libraries (pyaudio) it might be necessary to use both setups simultaneously.
+
+https://github.com/elisa-aleman/linux-data-science-py-setup
+
 <a id="basic-settings"></a>
 ## Basic Settings
 
@@ -131,8 +144,6 @@ https://www.sublimetext.com/download
 }
 ```
 
-For the moment, there's no equivalent to `sudo` that I know of, so we skip the root password setup as well.
-
 Also, Sublime Text is all about the plugins. Install Package Control by typing CTRL+Shift+P, then typing "Install Package Control"
 
 Then here's some cool packages to try:
@@ -163,6 +174,12 @@ In MarkdownTOC.sublime-settings, paste the following for hyperlink markdowns and
     "uri_encoding": false
   },
 }
+```
+
+After installing Markdown Editing, add this to the SublimeText4 preferences (my personal preferences)
+
+```
+"mde.auto_fold_link.enabled": false,
 ```
 
 <a id="easy-gitlab-or-github-math-add-paired--signs-to-the-keybinds"></a>
@@ -319,14 +336,14 @@ rsync
 
 It should output the different options you can use with it.
 
-<a id="setup-git-for-gitlab"></a>
-## Setup Git for GitLab
+<a id="setup-git"></a>
+## Setup Git
 
 At first, we need to make sure of the path that `.gitconfig` will be saved by default so let's config the user and email through GitBash itself.
 
 Run these commands and change in your username and email where appropriate.
 ```
-git config --global user.name "Your_GitLab_username"
+git config --global user.name "Your_username"
 git config --global user.email "your_email@company.com"
 ```
 
@@ -402,6 +419,14 @@ And you run it like:
 ```
 git adog
 ```
+
+<a id="push-with-tags-multi-line-git-alias"></a>
+### Push with tags: multi-line git alias
+
+To add a multi-line alias, for example, push and then push the tags on one single command, use `'!git ... && git ...'` as a format:
+
+Push with tags:
+`git config --global alias.pusht '!git push && git push --tags'`
 
 <a id="gitlab-markdown-math-expressions-for-readmemd-etc"></a>
 ### GitLab Markdown math expressions for README.md, etc.
@@ -981,10 +1006,28 @@ path = /mnt/c/Users/<username>/personal/.gitconfig.pers
 ```
 
 
-<a id="install-python-with-pyenv-win-and-set-it-up"></a>
-## Install Python with pyenv-win and set it up
+<a id="install-docker-desktop-for-windows"></a>
+## Install Docker Desktop for Windows
 
-A lot of tutorials use Anaconda but I will use Python by itself and virtualenv for extreme cases.
+Docker allows us to run server apps that share an internal environment separate from the OS.
+
+Follow the following guide for docker.
+https://docs.docker.com/desktop/install/windows-install/
+
+Reboot after installing.
+
+Running docker on WSL is also possible while having the Docker Desktop app open.
+The desktop app needs to be running before being able to run commands on the shell (WSL recommended).
+
+Test:`docker container --list`
+
+<a id="install-python-versions-with-pyenv-win-and-virtual-environments-with-poetry"></a>
+## Install Python versions with pyenv-win and virtual environments with poetry
+
+Below I explain how to use pyenv-win outside of WSL.
+
+For a guide of using pyenv within WSL follow my linux guide:
+https://github.com/elisa-aleman/linux-data-science-py-setup
 
 <a id="install-pyenv-first"></a>
 ### Install pyenv first
@@ -1007,6 +1050,7 @@ There is two ways of doing this, but I chose option 1 because it's faster and ca
 
 ```
 nano ~/.bashrc
+
 ---- add in nano interface---
 # PYENV paths
 export PATH=$PATH:~/.pyenv/pyenv-win/bin:~/.pyenv/pyenv-win/shims
@@ -1016,6 +1060,7 @@ export PYENV_HOME=~/.pyenv/pyenv-win/
 export PYENV_PYTHON_EXE=$(dirname $(pyenv.bat which python))
 export PATH=$PATH:$PYENV_PYTHON_EXE
 # To update PYENV_PYTHON_EXE if pyenv changes versions close bash and open again
+
 CTRL+O
 CTRL+X
 --------------------
@@ -1023,7 +1068,7 @@ source ~/.bashrc
 ```
 
 <a id="option-2-using-windows-settings"></a>
-#### Option 2) Using Windows Settings 
+#### Option 2) Using Windows Settings
 
 Go to System Properties, search for Environmental Variables and click the Environmental Variables button that results from an old fashioned settings window.
 Under User Environmental Variables add a NEW:
@@ -1078,14 +1123,14 @@ $ python -V
 Python 3.10.4
 ``` -->
 
-Let's install python 3.9.6 since that's the latest under pyenv-win (`pyenv install -l` to check).
+Let's install python 3.10.7 since that's the latest under pyenv-win (`pyenv install -l` to check).
 
 ```
 pyenv install 3.10.7
 pyenv global 3.10.7
 ```
 
-That sets 3.9.6 as the default.
+That sets 3.10.7 as the default.
 
 Go to System Properties, search for Environmental Variables and click the Environmental Variables button that results from an old fashioned settings window.
 
@@ -1102,14 +1147,14 @@ where python
     >>C:\Users\USERNAME\.pyenv\pyenv-win\shims\python
     >>C:\Users\USERNAME\.pyenv\pyenv-win\shims\python.bat
 python --version
-    >>Python 3.9.6
+    >>Python 3.10.7
 which pip
     >>/c/Users/USERNAME/.pyenv/pyenv-win/shims/pip
 where pip
     >>C:\Users\USERNAME\.pyenv\pyenv-win\shims\pip
     >>C:\Users\USERNAME\.pyenv\pyenv-win\shims\pip.bat
 pip --version
-    >>pip 22.0.4 from c:\users\USERNAME\.pyenv\pyenv-win\versions\3.9.6\lib\site-packages\pip (python 3.9)
+    >>pip 22.0.4 from c:\users\USERNAME\.pyenv\pyenv-win\versions\3.10.7\lib\site-packages\pip (python 3.9)
 ```
 
 All these should now return pyenv versions.
@@ -1137,6 +1182,11 @@ Let's also upgrade pip:
 pip install --upgrade pip
 ```
 
+<a id="how-to-upgrade-pyenv"></a>
+#### How to upgrade Pyenv
+
+If installed via Git go to `%USERPROFILE%\.pyenv\pyenv-win` (which is your installed path) and run `git pull`.
+
 <a id="read-python-command-history-between-sessions"></a>
 ### Read Python Command History between sessions
 
@@ -1148,7 +1198,7 @@ pip install pyreadline
 
 However, this has issues with non-ASCII characters and the library isn't being updated, so we'll go to the source files and edit the code a little:
 
-Go to `~/.pyenv/pyenv-win/versions/3.9.6/lib/site-packages/pyreadline/lineeditor/history.py`
+Go to `~/.pyenv/pyenv-win/versions/3.10.7/lib/site-packages/pyreadline/lineeditor/history.py`
 
 And edit like shown in this website:<br>
 https://programmerah.com/error-when-starting-python-in-windows-38032/
@@ -1169,58 +1219,70 @@ def read_history_file(self, filename=None):
 
 Then restart the Git-Bash and it should be working for all sorts of texts!
 
-<a id="how-to-upgrade-pyenv"></a>
-### How to upgrade Pyenv
 
-If installed via Git go to `%USERPROFILE%\.pyenv\pyenv-win` (which is your installed path) and run `git pull`.
+<a id="install-poetry"></a>
+### Install poetry
 
-<a id="install-virtualenv"></a>
-### Install virtualenv
-
-Virtualenv allows me to install different libraries under pip for specific projects.
+Poetry is a tool to manage python project dependencies and environments in a version controlled (e.g. git) and group accessible syntax. It allows to use a virtual environment to locally install all dependencies, remove or update them as needed while having access to previous instances of the environment at a given time via the commit history
 
 ```
-pip install virtualenv
+pip install poetry
 ```
 
-Usage guide is here:<br>
-https://mothergeo-py.readthedocs.io/en/latest/development/how-to/venv-win.html
+Usage guide: https://python-poetry.org/
+
+Making a new project can be as easy as:
+
+```
+poetry new project-name-here
+cd project-name-here
+```
+
+Then, instead of using `pip install` or `pip uninstall` we use `poetry add`
+
+```
+poetry add pathlib
+```
+
+This updates the dependency control files `poetry.toml`, `poetry.lock`, and `pyproject.toml`, which can be committed to version control.
+
+And finally, when cloning a repository, you can use `poetry install` to easily install all the dependencies controlled by poetry in one command.
 
 <a id="useful-data-science-libraries"></a>
 ### Useful Data Science libraries
 
-This is my generic fresh start install so I can work. Usually I'd install all of them in general, but recently I only install the necessary libraries under venv. There's more libraries with complicated installations in other repositories of mine, and you might not wanna run this particular piece of code without checking what I'm doing first. For example, you might have a specific version of Tensorflow that you want, or some of these you won't use. But I'll leave it here as reference.
+This is my generic fresh start install list so I can work. I only install the necessary libraries under poetry, so I don't recommend copy pasting all of it. There's more libraries with complicated installations in other repositories of mine, and you might not wanna run this particular piece of code without checking what I'm doing first. For example, you might have a specific version of Tensorflow that you want, or some of these you won't use. But I'll leave it here as reference.
 
 <a id="basic-tasks"></a>
 #### Basic tasks:
 
 ```
-pip install numpy scipy jupyter statsmodels \
+poetry add numpy scipy statsmodels \
 pandas pathlib tqdm retry openpyxl
 ```
 
 <a id="plotting"></a>
 #### Plotting:
 ```
-pip install matplotlib adjustText plotly kaleido
+poetry add matplotlib adjustText plotly kaleido
 ```
 
 <a id="basic-data-science-and-machine-learning"></a>
 #### Basic data science and machine learning:
 ```
-pip install sklearn sympy pyclustering
+poetry add sklearn sympy pyclustering
 ```
 
 <a id="data-mining--text-mining--crawling--scraping-websites"></a>
 #### Data mining / text mining / crawling / scraping websites:
 ```
-pip install beautifulsoup4 requests selenium
+poetry add beautifulsoup4 requests selenium
 ```
 
 <a id="natural-language-processing-nlp"></a>
 #### Natural language processing (NLP):
 ```
-pip install gensim nltk langdetect
+poetry add gensim nltk langdetect
 ```
 
 For Japanese NLP tools see:
@@ -1232,17 +1294,17 @@ https://github.com/elisa-aleman/StanfordCoreNLP_Chinese
 <a id="neural-network-and-machine-learning"></a>
 #### Neural network and machine learning:
 ```
-pip install tensorflow tflearn keras \
+poetry add tensorflow tflearn keras \
 torch torchaudio torchvision \
 optuna
 ```
 
 <a id="xgboost"></a>
-#### XGBoost 
+#### XGBoost
 
 To Install with CPU:
 ```
-pip install xgboost
+poetry add xgboost
 ```
 
 <a id="lightgbm"></a>
@@ -1251,7 +1313,7 @@ pip install xgboost
 Install with CPU:
 
 ```
-pip install lightgbm
+poetry add lightgbm
 ```
 
 <a id="minepy--maximal-information-coefficient"></a>
@@ -1261,11 +1323,13 @@ For Minepy / Maximal Information Coefficient, we need the Visual Studio C++ Buil
 https://visualstudio.microsoft.com/visual-cpp-build-tools/
 
 ```
-pip install minepy
+poetry add minepy
 ```
 
 <a id="computer-vision-opencv"></a>
 #### Computer Vision (OpenCV)
+
+**Note to self: re-write with poetry project use instead of venv**
 
 with CPU and no extra options:
 
@@ -1275,6 +1339,8 @@ python -m pip install -U opencv-python opencv-contrib-python
 
 <a id="install-and-setup-flask-for-python-web-development"></a>
 ## Install and setup Flask for Python Web Development
+
+**Note to self: re-write with poetry project use instead of venv**
 
 I'm using this guide:
 https://flask.palletsprojects.com/en/2.1.x/installation/#install-flask
@@ -1808,7 +1874,7 @@ $$x=3$$
 ## Accessibility Stuff
 
 <a id="accessible-color-palettes-with-paletton"></a>
-### Accessible Color Palettes with Paletton 
+### Accessible Color Palettes with Paletton
 
 When designing new things it's important to keep in mind color theory, as well as accessibility for the visually impaired and color blind people, etc. But that's so much time one could spend doing so much else, so here's a tool that can help with that and also visualizing how other people with different ranges of color vision would perceive it. It's called Paletton.
 
