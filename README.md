@@ -12,6 +12,7 @@ My current Windows PC is using Windows 365.
     - [WSL: Paths to directories outside of the Linux environment](#wsl-paths-to-directories-outside-of-the-linux-environment)
     - [WSL: About .profile and .bash_profile](#wsl-about-profile-and-bash_profile)
     - [Linux development guide](#linux-development-guide)
+    - [WSL: About DNS issues under VPN or proxy](#wsl-about-dns-issues-under-vpn-or-proxy)
 - [Basic Settings](#basic-settings)
     - [Install SublimeText](#install-sublimetext)
         - [Easy GitLab or GitHub math: Add paired $ signs to the keybinds](#easy-gitlab-or-github-math-add-paired--signs-to-the-keybinds)
@@ -102,6 +103,7 @@ This can be fixed in a few ways:
 
 3. Add `source ~/.profile` to the beginning of .bash_profile so that it is run regardless, and therefore also loads .bashrc if necessary. Personally I chose this one.
 
+<<<<<<< HEAD
 
 <a id="linux-development-guide"></a>
 ### Linux development guide
@@ -111,6 +113,28 @@ If using WSL fully without any interaction from Windows, follow the guide below.
 Sometimes, however, using GitBash for committing or other functions that interact with the computer such as in audio libraries (pyaudio) it might be necessary to use both setups simultaneously.
 
 https://github.com/elisa-aleman/linux-data-science-py-setup
+
+<a id="wsl-about-dns-issues-under-vpn-or-proxy"></a>
+### WSL: About DNS issues under VPN or proxy
+
+Commands such as `sudo apt update` or `pip install ...` will sometimes fail under WSL and a VPN or office network.
+This can also cause issues with docker, or any other development environment, so we need to confirm the following.
+
+`/etc/resolv.conf` needs to have this part not commented. (Alternatively, it could also be added in `/etc/wsl.conf` )
+
+```
+[network]
+generateResolvConf = false
+```
+
+Then, using `ipconfig|findstr DNS` to find your base domain, you can add it as well to `/etc/resolv.conf`:
+
+```
+search <YOUR_DOMAIN>
+nameserver 8.8.8.8
+nameserver 1.1.1.1
+```
+
 
 <a id="basic-settings"></a>
 ## Basic Settings
