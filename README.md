@@ -1,5 +1,7 @@
 # Initial Data Science setup for Windows
 
+Note: Migrated repository to https://github.com/elisa-aleman/ai_python_dev_reference
+
 I initially used to work on python and Data Science using MacOSX or Ubuntu, so changing to Windows was a confusing experience. Because of this I wrote a guide of everything I did for the initial setup of my computer to start programming.
 
 This is how I set up a fresh windows PC to start working in machine learning and programming. I also keep this tutorial handy in case I do a clean OS install or if I need to check some of my initial settings.
